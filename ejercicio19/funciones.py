@@ -99,6 +99,27 @@ def eliminar_entrenador(conexion): # Creamos la funcion par eliminar entrenadore
     try: # Ponemos un try para la localizacion de errores
         cursor=conexion.cursor()# cursor para conectar a la base de datos
         id=int(input("Pon la id del entrenador que desees eliminar: "))
-        consulta="""DELETE FROM entrenadores WHERE idcliente = %s"""
+        consulta="""DELETE FROM entrenadores WHERE identrenador = %s""" # Ponemos el comando que ejecutaremos para eliminar al entrenador 
+        cursor.execute(consulta,(id,)) # Ejecutamos el comando y sus datos ya establecidos
+        if cursor.rowcount > 0:
+            print(f"El entrenador con ID {id} ha sido eliminada.")
+        else:
+            print(f"No se encontró ningun entrenador con ID {id}.")
+        cursor.close()
     except mysql.connector.Error as err:
         print(f"Error al eliminar al entrenador: {err}")# Mensage en el que te dice el error que ocurre
+        
+def crear_actividades(conexion): # Creamos la funcion para crear actividades
+    try: # Ponemos un try para localizar errores
+        cursor=conexion.cursor() # cursor para conectar a la base de datos
+        id=int(input("Introduce el id de la actividad: "))
+        nombre=input("introduce es nombre de la actividad: ")
+        horario=input("introduce el horario del la actividad: ")
+        duracion=input("introduce la duracion de la actividad: ")
+        identrenador=int(input("introduce la ip de in entrenador: "))
+        cursor.execute("SELECT COUNT(*) FROM pedido WHERE identrenador = %s", (identrenador,)) # Ejecutamos el sigliente comando para comprobar que exixiste algun entrenador con el id puesto
+        if cursor.fetchone()[0] == 0:  # Si no hay un entrenador con ese ID, muestra un error
+            print(f"No existe un entrenador con ID {identrenador}.")
+            return
+    except mysql.connector.Error as err:
+        print(f"Error al crear la actividad: {err}") # Mensage en el que te dice el error que ocurre
