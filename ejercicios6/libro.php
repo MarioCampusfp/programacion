@@ -9,3 +9,8 @@ class libro{
     }
 };
 
+$libro= new libro;
+$libro->titulo="cancion de hielo y fuego: danza de dragones";
+$libro->autor="George R.R. Martin";
+$libro->numero_de_paginas=1.152;
+$libro->mostrarinfo();
