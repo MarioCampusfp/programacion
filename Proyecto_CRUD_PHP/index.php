@@ -1,3 +1,3 @@
 <?php
-header("Location: vista/lista_socios.php");
+header("Location: vista/lista_eventos.php");
 exit();
