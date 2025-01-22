@@ -1,17 +1,17 @@
 <?php
-require_once '../controlador/SociosController.php';
-$controller = new SociosController();
-$socios = $controller->listarSocios();
+require_once '../controlador/eventoscontroller.php';
+$controller = new EventoController();
+$eventos = $controller->listarEvento();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Socios</title>
+    <title>Listado de Eventos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Club deportivo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,33 +33,29 @@ $socios = $controller->listarSocios();
         </div>
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <h1>Socios Registrados</h1>
+    <h1>Eventos Registrados</h1>
     <table border="1">
         <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Fecha de Nacimiento</th>
+            <th>Fecha</th>
+            <th>Lugar</th>
             <th>Acciones</th>
         </tr>
-        <?php foreach ($socios as $socio): ?>
+        <?php foreach ($eventos as $evento): ?>
             <tr>
-                <td><?= $socio['id_socio'] ?></td>
-                <td><?= $socio['nombre'] ?></td>
-                <td><?= $socio['apellido'] ?></td>
-                <td><?= $socio['email'] ?></td>
-                <td><?= $socio['telefono'] ?></td>
-                <td><?= $socio['fecha_nacimiento'] ?></td>
+                <td><?= $evento['id_evento'] ?></td>
+                <td><?= $evento['nombre_evento'] ?></td>
+                <td><?= $evento['fecha'] ?></td>
+                <td><?= $evento['lugar'] ?></td>
                 <td>
-                    <a href="editar_socio.php?id=<?= $socio['id_socio'] ?>">Editar</a>
-                    <a href="eliminar_socio.php?id=<?= $socio['id_socio'] ?>">Eliminar</a>
+                    <a href="editar_evento.php?id=<?= $evento['id_evento'] ?>">Editar</a>
+                    <a href="eliminar_evento.php?id=<?= $evento['id_evento'] ?>">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
     <br>
-    <a href="alta_socio.php">Agregar un nuevo socio</a>
+    <a href="alta_evento.php">Agregar un nuevo evento</a>
 </body>
 </html>

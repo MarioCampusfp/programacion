@@ -1,10 +1,10 @@
 <?php
-require_once '../controlador/SociosController.php';
-$socio= new SociosController;
+require_once '../controlador/eventoscontroller.php';
+$evento= new EventoController;
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $id_socio=$_POST["id_evento"];
+    $id_evento=$_POST["id_evento"];
 
-    $alta= $socio->eliminarSocio($id_socio);
+    $alta= $evento->eliminarEvento($id_evento);
 }
 ?>
 <head>
@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 </head>
 <body style="text-align: center;">
     <div class="container mt-4">
-        <h1>eliminar un socio</h1>
+        <h1>eliminar un evento</h1>
         <div>
             <form action="alta_socio.php" method="post">
                 <div class="mb-3">
