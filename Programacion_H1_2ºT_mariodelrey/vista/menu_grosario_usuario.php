@@ -8,9 +8,9 @@ $usuarios = $controller->listarusuario();
 ?>
 <!DOCTYPE html>
 <html lang="es">
-<head> 
+<head>
     <meta charset="UTF-8">
-    <title>Listado de Socios</title>
+    <title>Coste Total Desglosado</title>
     <!-- Incluye el CSS de Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -40,50 +40,46 @@ $usuarios = $controller->listarusuario();
     <!-- Incluye el JS de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <div class="container mt-4">
-        <h1>Usuarios Registrados</h1>
-        <!-- Tabla de usuarios -->
+        <h1>Coste Total Desglosado de Usuarios</h1>
+        <!-- Tabla de usuarios con el coste total desglosado -->
         <table class="table table-bordered">
             <thead class="table-light">
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
                     <th>Correo</th>
-                    <th>Edad</th>
                     <th>Plan</th>
                     <th>Pack</th>
-                    <th>Duracion</th>
-                    <th>Acciones</th>
+                    <th>Coste Total</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Itera sobre la lista de usuarios y muestra cada uno en una fila de la tabla -->
                 <?php foreach ($usuarios as $usuario): ?>
                     <tr>
-                        <td><?= $usuario['id_usuario'] ?></td>
                         <td><?= $usuario['nombre'] ?></td>
                         <td><?= $usuario['correo'] ?></td>
-                        <td><?= $usuario['edad']?></td>
                         <td><?= $usuario['plan_nombre'] ?></td>
                         <td><?= $usuario['pack_nombre'] ?></td>
-                        <td><?= $usuario['duracion'] ?></td>
                         <td>
-                            <!-- Enlace para editar el usuario -->
-                            <a href="actualizar_usuario.php?id=<?= $usuario['id_usuario'] ?>" class="btn btn-warning btn-sm">Editar</a>
-                            <!-- Formulario para eliminar el usuario -->
-                            <form action="../controlador/usuariocontroller.php" method="post" style="display:inline;">
-                                <input type="hidden" name="accion" value="eliminar">
-                                <input type="hidden" name="id" value="<?= $usuario['id_usuario'] ?>">
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                            </form>
+                            <?php
+                            // Calcular el coste total basado en la duración de la suscripción
+                            $coste_total = 0;
+                            if ($usuario['duracion'] == 'mensual') {
+                                $coste_total += $usuario['plan_precio_mensual'];
+                                $coste_total += $usuario['pack_precio_mensual'];
+                            } else {
+                                $coste_total += $usuario['plan_precio_anual'];
+                                $coste_total += $usuario['pack_precio_anual'];
+                            }
+                            echo number_format($coste_total, 2) . ' €';
+                            ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <!-- Enlace para agregar un nuevo usuario -->
-        <a href="alta_usuarios.php" class="btn btn-primary">Agregar un nuevo usuario</a>
-        <!-- Enlace para el menú grosario usuario -->
-        <a href="menu_grosario_usuario.php" class="btn btn-secondary">Menú Grosario Usuario</a>
+        <!-- Enlace para volver a la lista de usuarios -->
+        <a href="lista_usuarios.php" class="btn btn-primary mt-3">Volver a la lista de usuarios</a>
     </div>
 </body>
 </html>
