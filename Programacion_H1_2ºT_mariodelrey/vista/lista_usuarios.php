@@ -51,17 +51,22 @@ $usuarios = $controller->listarusuario();
                 <td><?= $usuario['nombre'] ?></td>
                 <td><?= $usuario['correo'] ?></td>
                 <td><?= $usuario['edad']?></td>
-                <td><?= $usuario['plan'] ?></td>
-                <td><?= $usuario['pack'] ?></td>
+                <td><?= $usuario['id_plan'] ?></td>
+                <td><?= $usuario['id_pack'] ?></td>
                 <td><?= $usuario['duracion'] ?></td>
                 <td>
-                    <a href="editar_socio.php?id=<?= $usuario['id_usuario'] ?>">Editar</a>
-                    <a href="eliminar_socio.php?id=<?= $usuario['id_usuario'] ?>">Eliminar</a>
+                    <a href="actualizar_usuario.php?id=<?= $usuario['id_usuario'] ?>">Editar</a>
+                    <form action="../controlador/usuariocontroller.php/eliminarusuario" method="get">
+                        <input type="hidden" name="id" value="<?= $usuario['id_usuario'] ?>">
+                        <button type="submit">Eliminar</button>
+                    </form>
+
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
     <br>
     <a href="alta_usuarios.php">Agregar un nuevo usuario</a>
+    <a href="actualizar_usuario.php">Editar un usuario</a>
 </body>
 </html>

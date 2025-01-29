@@ -24,8 +24,8 @@ class usuarioController {
         $this->usuario->actualizarusuario ($id_usuario , $nombre, $correo, $edad, $plan, $pack, $duracion);
     }
 
-    public function eliminarSocio($id_usuario ) {
-        $this->usuario->eliminarSocio($id_usuario );
+    public function eliminarusuario($id_usuario ) {
+        $this->usuario->eliminarusuario($id_usuario );
     }
 }
 ?>
