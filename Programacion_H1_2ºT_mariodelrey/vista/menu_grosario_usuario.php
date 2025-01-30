@@ -2,7 +2,7 @@
 // Requiere el controlador de usuario
 require_once '../controlador/usuarioController.php';
 // Crea una instancia del controlador de usuario
-$controller = new usuarioController();
+$controller = new usuarioController;
 // Llama al método listarusuario para obtener la lista de usuarios
 $usuarios = $controller->listarusuario();
 ?>

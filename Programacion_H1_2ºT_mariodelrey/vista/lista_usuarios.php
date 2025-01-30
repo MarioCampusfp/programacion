@@ -5,6 +5,19 @@ require_once '../controlador/usuarioController.php';
 $controller = new usuarioController();
 // Llama al método listarusuario para obtener la lista de usuarios
 $usuarios = $controller->listarusuario();
+
+// Función para obtener la IP real del usuario
+function getRealIpAddr() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+        return $_SERVER['REMOTE_ADDR'];
+    } else {
+        return 'UNKNOWN';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -68,7 +81,11 @@ $usuarios = $controller->listarusuario();
                         <td><?= $usuario['duracion'] ?></td>
                         <td>
                             <!-- Enlace para editar el usuario -->
-                            <a href="actualizar_usuario.php?id=<?= $usuario['id_usuario'] ?>" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="actualizar_usuario.php" method="get" style="display:inline;">
+                                <input type="hidden" name="id" value="<?= $usuario['id_usuario'] ?>">
+                                <input type="hidden" name="ip" value="<?= getRealIpAddr() ?>">
+                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                            </form>
                             <!-- Formulario para eliminar el usuario -->
                             <form action="../controlador/usuariocontroller.php" method="post" style="display:inline;">
                                 <input type="hidden" name="accion" value="eliminar">

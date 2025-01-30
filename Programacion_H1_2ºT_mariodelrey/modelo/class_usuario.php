@@ -9,28 +9,29 @@ class usuario {
         $this->conexion = new Conexion();
     }
 
-    // Método para agregar un nuevo usuario
-    public function agregarusuario($nombre, $correo, $edad, $plan, $packs, $duracion) {
+    // Agrega un nuevo usuario a la base de datos
+    public function agregarusuario($nombre, $correo, $edad, $plan, $pack, $duracion) {
         $query = "INSERT INTO usuarios (nombre, correo, edad, id_plan, duracion) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conexion->conexion->prepare($query);
         $stmt->bind_param("ssiss", $nombre, $correo, $edad, $plan, $duracion);
 
         if ($stmt->execute()) {
-            echo "usuario agregado con éxito.";
+            echo "Usuario agregado con éxito.";
 
+            // Obtener el ID del usuario recién insertado
             $id_usuario = $this->conexion->conexion->insert_id;
 
-            foreach ($packs as $pack) {
-                $query2 = "INSERT INTO usuario_pack(id_usuario, id_pack) VALUES (?, ?)";
-                $stmt2 = $this->conexion->conexion->prepare($query2);
-                $stmt2->bind_param("ii", $id_usuario, $pack);
-                if ($stmt2->execute()) {
-                    echo "Usuario relacionado con el pack con éxito.";
-                } else {
-                    echo "Error al relacionar usuario con el pack: " . $stmt2->error;
-                }
-                $stmt2->close();
+            // Relacionar el usuario con el pack
+            $query2 = "INSERT INTO usuario_pack(id_usuario, id_pack) VALUES (?, ?)";
+            $stmt2 = $this->conexion->conexion->prepare($query2);
+            $stmt2->bind_param("ii", $id_usuario, $pack);
+            if ($stmt2->execute()) {
+                echo "Usuario relacionado con el pack con éxito.";
+            } else {
+                echo "Error al relacionar usuario con el pack: " . $stmt2->error;
             }
+
+            $stmt2->close();
         } else {
             echo "Error al agregar usuario: " . $stmt->error;
         }
@@ -38,7 +39,7 @@ class usuario {
         $stmt->close();
     }
 
-    // Método para obtener todos los usuarios
+    // Obtiene todos los usuarios de la base de datos
     public function obtenerusuario() {
         $query = "SELECT u.*, sp.nombre AS plan_nombre, sp.precio_mensual AS plan_precio_mensual, sp.precio_anual AS plan_precio_anual, 
                          spk.nombre AS pack_nombre, spk.precio_mensual AS pack_precio_mensual, spk.precio_anual AS pack_precio_anual 
@@ -54,7 +55,7 @@ class usuario {
         return $usuario;
     }
 
-    // Método para obtener un usuario por su ID
+    // Obtiene un usuario específico por su ID
     public function obtenerusuarioPorId($id_usuario) {
         $query = "SELECT * FROM usuarios WHERE id_usuario = ?";
         $stmt = $this->conexion->conexion->prepare($query);
@@ -64,22 +65,24 @@ class usuario {
         return $resultado->fetch_assoc();
     }
 
-    // Método para actualizar un usuario existente
-    public function actualizarusuario($id_usuario, $nombre, $correo, $edad, $plan, $packs, $duracion) {
+    // Actualiza la información de un usuario existente
+    public function actualizarusuario($id_usuario, $nombre, $correo, $edad, $plan, $pack, $duracion) {
         $query = "UPDATE usuarios SET nombre = ?, correo = ?, edad = ?, id_plan = ?, duracion = ? WHERE id_usuario = ?";
         $stmt = $this->conexion->conexion->prepare($query);
-        $stmt->bind_param("ssissi", $nombre, $correo, $edad, $plan, $duracion, $id_usuario);
+        $stmt->bind_param("sssssi", $nombre, $correo, $edad, $plan, $duracion, $id_usuario);
 
-        if ($stmt->execute()) {
-            echo "Usuario actualizado con éxito.";
+        try {
+            if ($stmt->execute()) {
+                echo "Usuario actualizado con éxito.";
 
-            $query_delete = "DELETE FROM usuario_pack WHERE id_usuario = ?";
-            $stmt_delete = $this->conexion->conexion->prepare($query_delete);
-            $stmt_delete->bind_param("i", $id_usuario);
-            $stmt_delete->execute();
-            $stmt_delete->close();
+                // Elimina los packs existentes
+                $queryDelete = "DELETE FROM usuario_pack WHERE id_usuario = ?";
+                $stmtDelete = $this->conexion->conexion->prepare($queryDelete);
+                $stmtDelete->bind_param("i", $id_usuario);
+                $stmtDelete->execute();
+                $stmtDelete->close();
 
-            foreach ($packs as $pack) {
+                // Inserta el nuevo pack
                 $query2 = "INSERT INTO usuario_pack(id_usuario, id_pack) VALUES (?, ?)";
                 $stmt2 = $this->conexion->conexion->prepare($query2);
                 $stmt2->bind_param("ii", $id_usuario, $pack);
@@ -89,15 +92,21 @@ class usuario {
                     echo "Error al relacionar usuario con el pack: " . $stmt2->error;
                 }
                 $stmt2->close();
+            } else {
+                echo "Error al actualizar Usuario: " . $stmt->error;
             }
-        } else {
-            echo "Error al actualizar Usuario: " . $stmt->error;
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                echo "Error: El correo electrónico ya está en uso.";
+            } else {
+                throw $e;
+            }
         }
 
         $stmt->close();
     }
 
-    // Método para eliminar un usuario
+    // Elimina un usuario de la base de datos
     public function eliminarusuario($id_usuario) {
         $query = "DELETE FROM usuarios WHERE id_usuario = ?";
         $stmt = $this->conexion->conexion->prepare($query);
@@ -112,7 +121,7 @@ class usuario {
         $stmt->close();
     }
 
-    // Método para obtener todos los planes
+    // Obtiene todos los planes disponibles
     public function obtenerPlanes() {
         $query = "SELECT * FROM stream_plan";
         $resultado = $this->conexion->conexion->query($query);
@@ -123,7 +132,7 @@ class usuario {
         return $planes;
     }
 
-    // Método para obtener todos los packs
+    // Obtiene todos los packs disponibles
     public function obtenerPacks() {
         $query = "SELECT * FROM stream_pack";
         $resultado = $this->conexion->conexion->query($query);
