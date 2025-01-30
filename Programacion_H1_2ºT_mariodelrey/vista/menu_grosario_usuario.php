@@ -25,13 +25,13 @@ $usuarios = $controller->listarusuario();
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="lista_socios.php">Socios</a>
+                        <a class="nav-link" href="lista_usuarios.php">Lista de Usuarios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lista_eventos.php">Eventos</a>
+                        <a class="nav-link" href="menu_grosario_usuario.php">Menú Grosario Usuario</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Inscripciones</a>
+                        <a class="nav-link" href="alta_usuarios.php">Alta de Usuarios</a>
                     </li>
                 </ul>
             </div>

@@ -10,10 +10,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $correo=$_POST["correo"];
     $edad=$_POST["edad"];
     $plan=$_POST["plan"];
-    $pack=$_POST["pack"];
+    $packs=$_POST["pack"]; // Cambiado para manejar múltiples packs
     $duracion=$_POST["duracion"]; 
 
-    $alta= $usuario->agregarusuario($nombre, $correo, $edad, $plan, $pack, $duracion);
+    $alta = $usuario->agregarusuario($nombre, $correo, $edad, $plan, $packs, $duracion);
 }
 ?>
 <!DOCTYPE html>
@@ -28,22 +28,22 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             const edad = document.getElementById('edad').value;
             const plan = document.getElementById('plan').value;
             const duracion = document.getElementById('duracion').value;
-            const pack = document.getElementById('pack').value;
+            const pack = document.getElementById('pack');
 
             // Validar que los usuarios menores de 18 años solo puedan contratar el Pack Infantil
-            if (edad < 18 && pack != 3) {
+            if (edad < 18 && !Array.from(pack.selectedOptions).some(option => option.value == 3)) {
                 alert('Los usuarios menores de 18 años solo pueden contratar el Pack Infantil.');
                 return false;
             }
 
             // Validar que los usuarios del Plan Básico solo puedan seleccionar un paquete adicional
-            if (plan == 1 && document.querySelectorAll('#pack option:checked').length > 1) {
+            if (plan == 1 && pack.selectedOptions.length > 1) {
                 alert('Los usuarios del Plan Básico solo pueden seleccionar un paquete adicional.');
                 return false;
             }
 
             // Validar que el Pack Deporte solo pueda ser contratado si la duración de la suscripción es de 1 año
-            if (pack == 1 && duracion != 'anual') {
+            if (Array.from(pack.selectedOptions).some(option => option.value == 1) && duracion != 'anual') {
                 alert('El Pack Deporte solo puede ser contratado si la duración de la suscripción es de 1 año.');
                 return false;
             }
@@ -53,6 +53,27 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     </script>
 </head>
 <body style="text-align: center;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">StreamWeb</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="lista_usuarios.php">Lista de Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu_grosario_usuario.php">Menú Grosario Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="alta_usuarios.php">Alta de Usuarios</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container mt-4">
         <h1>Agregar un nuevo usuario</h1>
         <div>
@@ -86,7 +107,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 </div>
                 <div class="mb-3">
                     <label for="pack" class="form-label">Elige su pack</label><br>
-                    <select class="form-control" id="pack" name="pack" required>
+                    <select class="form-control" id="pack" name="pack[]" multiple required>
                         <?php foreach ($packs as $pack): ?>
                             <option value="<?= $pack['id_pack'] ?>"><?= $pack['nombre'] ?></option>
                         <?php endforeach; ?>

@@ -10,7 +10,7 @@ class usuario {
     }
 
     // Método para agregar un nuevo usuario
-    public function agregarusuario($nombre, $correo, $edad, $plan, $pack, $duracion) {
+    public function agregarusuario($nombre, $correo, $edad, $plan, $packs, $duracion) {
         $query = "INSERT INTO usuarios (nombre, correo, edad, id_plan, duracion) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conexion->conexion->prepare($query);
         $stmt->bind_param("ssiss", $nombre, $correo, $edad, $plan, $duracion);
@@ -20,16 +20,17 @@ class usuario {
 
             $id_usuario = $this->conexion->conexion->insert_id;
 
-            $query2 = "INSERT INTO usuario_pack(id_usuario, id_pack) VALUES (?, ?)";
-            $stmt2 = $this->conexion->conexion->prepare($query2);
-            $stmt2->bind_param("ii", $id_usuario, $pack);
-            if ($stmt2->execute()) {
-                echo "Usuario relacionado con el pack con éxito.";
-            } else {
-                echo "Error al relacionar usuario con el pack: " . $stmt2->error;
+            foreach ($packs as $pack) {
+                $query2 = "INSERT INTO usuario_pack(id_usuario, id_pack) VALUES (?, ?)";
+                $stmt2 = $this->conexion->conexion->prepare($query2);
+                $stmt2->bind_param("ii", $id_usuario, $pack);
+                if ($stmt2->execute()) {
+                    echo "Usuario relacionado con el pack con éxito.";
+                } else {
+                    echo "Error al relacionar usuario con el pack: " . $stmt2->error;
+                }
+                $stmt2->close();
             }
-
-            $stmt2->close();
         } else {
             echo "Error al agregar usuario: " . $stmt->error;
         }
@@ -64,13 +65,31 @@ class usuario {
     }
 
     // Método para actualizar un usuario existente
-    public function actualizarusuario($id_usuario, $nombre, $correo, $edad, $plan, $pack, $duracion) {
-        $query = "UPDATE usuarios SET nombre = ?, correo = ?, edad = ?, plan = ?, duracion = ? WHERE id_usuario = ?";
+    public function actualizarusuario($id_usuario, $nombre, $correo, $edad, $plan, $packs, $duracion) {
+        $query = "UPDATE usuarios SET nombre = ?, correo = ?, edad = ?, id_plan = ?, duracion = ? WHERE id_usuario = ?";
         $stmt = $this->conexion->conexion->prepare($query);
-        $stmt->bind_param("sssssi", $nombre, $correo, $edad, $plan, $pack, $duracion, $id_usuario);
+        $stmt->bind_param("ssissi", $nombre, $correo, $edad, $plan, $duracion, $id_usuario);
 
         if ($stmt->execute()) {
             echo "Usuario actualizado con éxito.";
+
+            $query_delete = "DELETE FROM usuario_pack WHERE id_usuario = ?";
+            $stmt_delete = $this->conexion->conexion->prepare($query_delete);
+            $stmt_delete->bind_param("i", $id_usuario);
+            $stmt_delete->execute();
+            $stmt_delete->close();
+
+            foreach ($packs as $pack) {
+                $query2 = "INSERT INTO usuario_pack(id_usuario, id_pack) VALUES (?, ?)";
+                $stmt2 = $this->conexion->conexion->prepare($query2);
+                $stmt2->bind_param("ii", $id_usuario, $pack);
+                if ($stmt2->execute()) {
+                    echo "Usuario relacionado con el pack con éxito.";
+                } else {
+                    echo "Error al relacionar usuario con el pack: " . $stmt2->error;
+                }
+                $stmt2->close();
+            }
         } else {
             echo "Error al actualizar Usuario: " . $stmt->error;
         }
