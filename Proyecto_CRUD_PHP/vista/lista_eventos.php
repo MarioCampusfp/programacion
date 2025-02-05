@@ -1,7 +1,7 @@
 <?php
-require_once '../controlador/eventoscontroller.php';
-$controller = new EventoController();
-$eventos = $controller->listarEvento();
+require_once '../controlador/Controlador.php';
+$controller = new Controlador();
+$eventos = $controller->listarEventos();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -25,9 +25,6 @@ $eventos = $controller->listarEvento();
                     <li class="nav-item">
                         <a class="nav-link" href="lista_eventos.php">Eventos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Inscripciones</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -50,7 +47,11 @@ $eventos = $controller->listarEvento();
                 <td><?= $evento['lugar'] ?></td>
                 <td>
                     <a href="editar_evento.php?id=<?= $evento['id_evento'] ?>">Editar</a>
-                    <a href="eliminar_evento.php?id=<?= $evento['id_evento'] ?>">Eliminar</a>
+                    <form action="../controlador/Controlador.php" method="post" style="display:inline;">
+                        <input type="hidden" name="id_evento" value="<?= $evento['id_evento'] ?>">
+                        <input type="hidden" name="accion" value="eliminarEvento">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
                 </td>
             </tr>
         <?php endforeach; ?>
