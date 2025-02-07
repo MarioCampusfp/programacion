@@ -1,6 +1,6 @@
 <?php
-require_once '../controlador/SociosController.php';
-$controller = new SociosController();
+require_once '../controlador/Controlador.php';
+$controller = new Controlador();
 $socios = $controller->listarSocios();
 ?>
 <!DOCTYPE html>
@@ -54,7 +54,11 @@ $socios = $controller->listarSocios();
                 <td><?= $socio['fecha_nacimiento'] ?></td>
                 <td>
                     <a href="editar_socio.php?id=<?= $socio['id_socio'] ?>">Editar</a>
-                    <a href="eliminar_socio.php?id=<?= $socio['id_socio'] ?>">Eliminar</a>
+                    <form action="../controlador/Controlador.php" method="post" style="display:inline;">
+                        <input type="hidden" name="id_socio" value="<?= $socio['id_socio'] ?>">
+                        <input type="hidden" name="accion" value="eliminarSocio">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
                 </td>
             </tr>
         <?php endforeach; ?>
