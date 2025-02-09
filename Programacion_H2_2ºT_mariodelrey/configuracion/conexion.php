@@ -14,6 +14,7 @@ class Conexion {
         }
     }
 
+    // Método para cerrar la conexión
     public function cerrar() {
         $this->conexion->close();
     }
