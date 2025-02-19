@@ -2,10 +2,13 @@
 require_once "controladores/controladores.php";
 
 $controlador = new receta();
+$recetas = $controlador->listar_recetas();
+$puerto = '1234';
+$url = "http://localhost:$puerto/v1/chat/completions";
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,7 +51,7 @@ $controlador = new receta();
             </thead>
             <tbody>
                 <!--itera sobre listar las recetas y muestra cada una en una fila de la tabla -->
-                <?php foreach($recetas as $receta): ?>
+                <?php foreach ($recetas as $receta): ?>
                     <tr>
                         <td><?=$receta["id_receta"] ?></td>
                         <td><?=$receta["nombre"] ?></td>

@@ -10,6 +10,11 @@ class receta{
         $this->conexion = new conexion();
     }
 
+    //funcion para listar las recetas
+    public function listar_recetas(){
+        $query="SELECT * FROM recetas";
+    }
+
     //funcion para agregar una receta
     public function agregar_receta($nombre, $ingredientes, $elaboracion, $descripcion){
         $query="INSERT INTO recetas (nombre, ingredientes, elaboracion, descripcion) VALUES (?,?,?,?)";

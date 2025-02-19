@@ -9,6 +9,11 @@ class receta_controlador{
         $this->receta= new receta();
     }
 
+    //metodo para listar una receta
+    public function listar_recetas(){
+        $this->receta->listar_recetas();
+    }
+
     //metodo para agregar una nueva receta
     public function agregar_receta($nombre, $ingredientes, $elaboreacion, $descripcion){
         $this->receta ->agregar_receta ($nombre, $ingredientes, $elaboreacion , $descripcion);
