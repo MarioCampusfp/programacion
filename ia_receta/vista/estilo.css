@@ -1,0 +1,55 @@
+/* Ajustes globales */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Estilo del navbar */
+.navbar {
+    background: linear-gradient(90deg, #0066cc, #003366);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estilo de la marca en el navbar */
+.navbar-brand {
+    font-weight: bold;
+    color: #fff !important;
+    font-size: 1.5rem;
+}
+
+/* Estilo para enlaces de navegación */
+.nav_item {
+    color: #fff !important;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+.nav_item:hover {
+    color: #ffcc00 !important;
+}
+
+/* Margen superior para contenedores */
+.container {
+    margin-top: 20px;
+}
+
+/* Opciones para la tabla (opcionales) */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin-top: 20px;
+}
+.table th, .table td {
+    padding: 12px 15px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+.table thead {
+    background-color: #0066cc;
+    color: #ffffff;
+}
+.table tbody tr:nth-child(even) {
+    background-color: #e9ecef;
+}
+.table tbody tr:hover {
+    background-color: #ccc;
+}

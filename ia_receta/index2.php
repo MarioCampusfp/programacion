@@ -1,4 +1,4 @@
-<?php
+<?php 
 // 1. Configuración: Definimos el puerto y construimos la URL local.
 // Dado que LM Studio se ejecuta en local, usamos 'localhost'.
 // Asegúrate de que LM Studio esté corriendo en el puerto 8000.
