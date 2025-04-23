@@ -1,0 +1,3 @@
+Nombre: Mario nota: 7
+Nombre: Martin nota: 6
+Nombre: Dani nota: 8
